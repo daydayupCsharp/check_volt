@@ -18,6 +18,7 @@ namespace check_volt
     public partial class Form1 : Form
     {
         //SerialNumber,UpdateOn
+        string instr = "";
         DataTable dt1 = new DataTable();
         string addUser = "";
         string SerialNumber = "";
@@ -29,6 +30,11 @@ namespace check_volt
         string addtime = "";
         string connstr = "Database=mes;Data Source=10.52.67.28;port=3306;User Id=wwb;Password=123@mes";
         double row;
+        string tkey = "";
+        bool b = false;
+        bool b3 = true;
+        bool b2 = true;
+        bool b4 = true;
         public Form1()
         {
             Control.CheckForIllegalCrossThreadCalls = false;
@@ -41,7 +47,7 @@ namespace check_volt
         {
 
             string writeBody = "";
-            writeBody = DateTime.Now.ToString() + "  " + textBox1.Text + "   " + richTextBox3.Text + "-----" + richTextBox2.Text + "-----";
+            writeBody = DateTime.Now.ToString() + "  " + instr + "   " + richTextBox3.Text + "-----" + richTextBox2.Text + "-----";
             var pFileName = DateTime.Now.ToString("yyyy-MM-dd"); //文件名
             string pSaveLogPath = @"" + Directory.GetCurrentDirectory().Substring(0, 3) + "";//路径
             string pSaveLogName = pSaveLogPath + "\\" + pFileName + "Log.txt";//完整LOG文件路径
@@ -289,7 +295,7 @@ namespace check_volt
         //            MySqlDataReader test2 = new MySqlCommand(@"select a.gradeCode,min(a.capacity) from tdcbasecellinfo a 
         //left join tdcproducemoduleassembleitem b on a.cellLabelCode =b.cellLabelCode 
         //left join tdcproducepackassembleitem c on b.moduleLabelCode =c.moduleLabelCode 
-        //where c.packLabelCode ='" + textBox1.Text + "'", conn).ExecuteReader();
+        //where c.packLabelCode ='" + instr + "'", conn).ExecuteReader();
         //            while (test2.Read())
         //            {
         //                gradeCode = test2[0].ToString();
@@ -297,23 +303,23 @@ namespace check_volt
         //            }
         //            test2.Close();
         //            richTextBox3.SelectionColor = Color.Blue;
-        //            richTextBox3.AppendText("包体码：" + textBox1.Text + "\r\n");
+        //            richTextBox3.AppendText("包体码：" + instr + "\r\n");
         //            richTextBox3.AppendText("档位：" + gradeCode + "      包内电芯最小容量：" + capacity + "\r\n");
         //            gradeCode = null;
         //            capacity = null;
         //            conn.Close();
 
-        //            string csv_path = @"C:\Users\wang.hui110\Desktop\新建文件夹\P_" + textBox1.Text.Substring(5, 5) + "_JINGTAI1_" + textBox1.Text + "_" + time + "_Bv.csv";
+        //            string csv_path = @"C:\Users\wang.hui110\Desktop\新建文件夹\P_" + instr.Substring(5, 5) + "_JINGTAI1_" + instr + "_" + time + "_Bv.csv";
         //            for (int i = 0; i <= 40000; i++)
         //            {
         //                if (!File.Exists(csv_path))
         //                {
         //                    time--;
-        //                    csv_path = @"C:\Users\wang.hui110\Desktop\新建文件夹\P_" + textBox1.Text.Substring(5, 5) + "_JINGTAI1_" + textBox1.Text + "_" + time + "_Bv.csv";
+        //                    csv_path = @"C:\Users\wang.hui110\Desktop\新建文件夹\P_" + instr.Substring(5, 5) + "_JINGTAI1_" + instr + "_" + time + "_Bv.csv";
         //                }
         //                else
         //                {
-        //                    path = @"C:\Users\wang.hui110\Desktop\新建文件夹\P_" + textBox1.Text.Substring(5, 5) + "_JINGTAI1_" + textBox1.Text + "_" + time + "_Bv.csv";
+        //                    path = @"C:\Users\wang.hui110\Desktop\新建文件夹\P_" + instr.Substring(5, 5) + "_JINGTAI1_" + instr + "_" + time + "_Bv.csv";
         //                    break;
         //                }
         //            }
@@ -444,17 +450,21 @@ namespace check_volt
         {
             if (e.KeyChar == (char)Keys.Enter)
             {
-
+                b = false;
+                b3 = true;
+                b2 = true;
+                b4 = true;
                 richTextBox1.Clear();
                 richTextBox2.Clear();
                 richTextBox3.Clear();
-                DateTime overtrue = DateTime.Now;
-                double time = Convert.ToDouble(overtrue.ToString("yyyyMMddHHmmss"));
-                string m_time = overtrue.ToString("yyyy-MM-dd-HH-mm-ss");
+                //DateTime overtrue = DateTime.Now;
+                //double time = Convert.ToDouble(overtrue.ToString("yyyyMMddHHmmss"));
+                //string m_time = overtrue.ToString("yyyy-MM-dd-HH-mm-ss");
                 string path = "";
                 MySqlConnection conn = new MySqlConnection(connstr);
                 MySqlConnection conn2 = new MySqlConnection(connstr);
                 MySqlConnection conn3 = new MySqlConnection(connstr);
+                instr = textBox1.Text.Trim();
 
 
 
@@ -478,7 +488,7 @@ namespace check_volt
                         MySqlCommand msc2 = new MySqlCommand(@"select a.gradeCode,min(a.capacity) from tdcbasecellinfo a 
 left join tdcproducemoduleassembleitem b on a.cellLabelCode =b.cellLabelCode 
 left join tdcproducepackassembleitem c on b.moduleLabelCode =c.moduleLabelCode 
-where c.packLabelCode ='" + textBox1.Text + "'", conn);
+where c.packLabelCode ='" + instr + "'", conn);
                         MySqlDataReader test2 = msc2.ExecuteReader();
                         try
                         {
@@ -496,7 +506,7 @@ where c.packLabelCode ='" + textBox1.Text + "'", conn);
                         test2.Close();
                         msc2.Dispose();
                         richTextBox3.SelectionColor = Color.Blue;
-                        richTextBox3.AppendText("包体码：" + textBox1.Text + "\r\n档位：" + gradeCode + "      包内电芯最小容量：" + capacity + "\r\n");
+                        richTextBox3.AppendText("包体码：" + instr + "\r\n档位：" + gradeCode + "      包内电芯最小容量：" + capacity + "\r\n");
                         // richTextBox3.AppendText("档位：" + gradeCode + "      包内电芯最小容量：" + capacity + "\r\n");
                         gradeCode = "";
                         capacity = "";
@@ -505,7 +515,7 @@ where c.packLabelCode ='" + textBox1.Text + "'", conn);
                     {
                         MySqlCommand msc2 = new MySqlCommand(@"select a.gradeCode,min(a.capacity) from tdcbasecellinfo a 
 left join tdcproducemoduleassembleitem b on a.cellLabelCode =b.cellLabelCode 
-where b.moduleLabelCode ='" + textBox1.Text + "'", conn);
+where b.moduleLabelCode ='" + instr + "'", conn);
                         MySqlDataReader test2 = msc2.ExecuteReader();
                         try
                         {
@@ -523,7 +533,7 @@ where b.moduleLabelCode ='" + textBox1.Text + "'", conn);
                         test2.Close();
                         msc2.Dispose();
                         richTextBox3.SelectionColor = Color.Blue;
-                        richTextBox3.AppendText("模组码：" + textBox1.Text + "\r\n档位：" + gradeCode + "      模组内电芯最小容量：" + capacity + "\r\n");
+                        richTextBox3.AppendText("模组码：" + instr + "\r\n档位：" + gradeCode + "      模组内电芯最小容量：" + capacity + "\r\n");
                         // richTextBox3.AppendText("档位：" + gradeCode + "      包内电芯最小容量：" + capacity + "\r\n");
                         gradeCode = "";
                         capacity = "";
@@ -536,7 +546,7 @@ where b.moduleLabelCode ='" + textBox1.Text + "'", conn);
                     conn2.Open();
                     if (checkBox2.Checked == true)
                     {
-                        MySqlCommand msc4 = new MySqlCommand(@"select oldLabelCode  from tdcpack_module_cellinfo where packLabelCode ='" + textBox1.Text + "'", conn2);
+                        MySqlCommand msc4 = new MySqlCommand(@"select oldLabelCode  from tdcpack_module_cellinfo where packLabelCode ='" + instr + "'", conn2);
                         MySqlDataReader test4 = msc4.ExecuteReader();
                         while (test4.Read())
                         {
@@ -571,7 +581,7 @@ and ActionID='3'", conn);
                     }
                     else if (checkBox6.Checked == true)
                     {
-                        MySqlCommand msc4 = new MySqlCommand(@"select oldLabelCode  from tdcpack_module_cellinfo where moduleLabelCode ='" + textBox1.Text + "'", conn2);
+                        MySqlCommand msc4 = new MySqlCommand(@"select oldLabelCode  from tdcpack_module_cellinfo where moduleLabelCode ='" + instr + "'", conn2);
                         MySqlDataReader test4 = msc4.ExecuteReader();
                         while (test4.Read())
                         {
@@ -614,7 +624,7 @@ and ActionID='3'", conn);
                     {
 
                         //                        MySqlDataReader test3 = new MySqlCommand(@"select  remarks,addUser from tdcqualitypackbadentryresult
-                        //where badLabelCode='" + textBox1.Text+"'", conn3).ExecuteReader();
+                        //where badLabelCode='" + instr+"'", conn3).ExecuteReader();
 
                         //                        while(test3.Read())
                         //                        {
@@ -635,7 +645,7 @@ and ActionID='3'", conn);
 
 
                         MySqlCommand msc = new MySqlCommand(@"select  remarks,addUser from tdcqualitypackbadentryresult
-where badLabelCode='" + textBox1.Text + "'", conn3);
+where badLabelCode='" + instr + "'", conn3);
                         MySqlDataAdapter msd = new MySqlDataAdapter(msc);
                         msd.Fill(dt1);
                         if (dt1 == null || dt1.Rows.Count == 0)
@@ -662,21 +672,25 @@ where badLabelCode='" + textBox1.Text + "'", conn3);
                     if (checkBox4.Checked == true)
                     {
 
-                        string csv_path = textBox2.Text + @"\P_" + textBox1.Text.Substring(5, 5) + "_JINGTAI1_" + textBox1.Text + "_" + time + "_Bv.csv";
-                        for (int i = 0; i <= 40000; i++)
-                        {
-                            if (!File.Exists(csv_path))
-                            {
-                                time--;
-                                csv_path = textBox2.Text + @"\P_" + textBox1.Text.Substring(5, 5) + "_JINGTAI1_" + textBox1.Text + "_" + time + "_Bv.csv";
-                            }
-                            else
-                            {
-                                path = textBox2.Text + @"\P_" + textBox1.Text.Substring(5, 5) + "_JINGTAI1_" + textBox1.Text + "_" + time + "_Bv.csv";
-                                break;
-                            }
-                        }
-
+                        //string csv_path = textBox2.Text + @"\P_" + instr.Substring(5, 5) + "_JINGTAI1_" + instr + "_" + time + "_Bv.csv";
+                        //for (int i = 0; i <= 40000; i++)
+                        //{
+                        //    if (!File.Exists(csv_path))
+                        //    {
+                        //        time--;
+                        //        csv_path = textBox2.Text + @"\P_" + instr.Substring(5, 5) + "_JINGTAI1_" + instr + "_" + time + "_Bv.csv";
+                        //    }
+                        //    else
+                        //    {
+                        //        path = textBox2.Text + @"\P_" + instr.Substring(5, 5) + "_JINGTAI1_" + instr + "_" + time + "_Bv.csv";
+                        //        break;
+                        //    }
+                        //}
+                        DirectoryInfo root = new DirectoryInfo(textBox2.Text);
+                        DirectoryInfo[] dics = root.GetDirectories();
+                        tkey = "*" + instr + "*_Bv.csv";//含有ABCDEF字符的txt文件名，不区分大小写
+                        FileInfo[] files = root.GetFiles(tkey);//获取含有ABCDEF字符的txt文件名
+                        path = files[files.Length - 1].ToString();
                         //OpenFileDialog ofd = new OpenFileDialog();
                         //ofd.Title = "请选择需要校验的文件";
                         //ofd.InitialDirectory = System.Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
@@ -710,9 +724,7 @@ where badLabelCode='" + textBox1.Text + "'", conn3);
                                     fs.Close();
 
                                     richTextBox3.AppendText("数据表共" + dt.Rows.Count + "行--" + dt.Columns.Count + "列--\r\n");
-                                    bool b = false;
-                                    bool b3 = true;
-                                    bool b2 = true;
+
                                     Barrier barrier = new Barrier(2, it =>
                                     {
                                         if (b2 == false | b3 == false)
@@ -770,13 +782,13 @@ where badLabelCode='" + textBox1.Text + "'", conn3);
                                             {
                                                 row.Add(Convert.ToDouble(dt.Rows[i][j].ToString()));
                                             }
-                                            if (textBox1.Text.Substring(5, 3) == "PE4")
+                                            if (instr.Substring(5, 3) == "PE4")
                                             {
                                                 row.RemoveAt(30);
                                                 row.RemoveAt(95);
                                             }
 
-                                            else if (textBox1.Text.Substring(5, 3) == "PE5" | textBox1.Text.Substring(5, 3) == "PE6")
+                                            else if (instr.Substring(5, 3) == "PE5" | instr.Substring(5, 3) == "PE6")
                                             {
                                                 row.RemoveAt(42);
                                                 row.RemoveAt(125);
@@ -810,42 +822,49 @@ where badLabelCode='" + textBox1.Text + "'", conn3);
                     }
                     else if (checkBox7.Checked == true)
                     {
-                        if (textBox1.Text.Substring(3, 1) == "M")
-                        {
-                            string csv_path = textBox2.Text + @"\M_" + textBox1.Text.Substring(5, 3) + "_MZCY_" + textBox1.Text + "_" + m_time + "_Bv.csv";
-                            for (int i = 0; i <= 40000; i++)
-                            {
-                                if (!File.Exists(csv_path))
-                                {
+                        //if (instr.Substring(3, 1) == "M")
+                        //{
+                        //    string csv_path = textBox2.Text + @"\M_" + instr.Substring(5, 3) + "_MZCY_" + instr + "_" + m_time + "_Bv.csv";
+                        //    for (int i = 0; i <= 40000; i++)
+                        //    {
+                        //        if (!File.Exists(csv_path))
+                        //        {
 
-                                    m_time = overtrue.AddSeconds(-i - 1).ToString("yyyy-MM-dd-HH-mm-ss");
-                                    csv_path = textBox2.Text + @"\M_" + textBox1.Text.Substring(5, 3) + "_MZCY_" + textBox1.Text + "_" + m_time + "_Bv.csv";
-                                }
-                                else
-                                {
-                                    path = textBox2.Text + @"\M_" + textBox1.Text.Substring(5, 3) + "_MZCY_" + textBox1.Text + "_" + m_time + "_Bv.csv";
-                                    break;
-                                }
-                            }
-                        }
-                        else if (textBox1.Text.Substring(3, 1) == "P")
-                        {
-                            string csv_path = textBox2.Text + @"\P_" + textBox1.Text.Substring(5, 3) + "_BTCY_" + textBox1.Text + "_" + m_time + "_Bv.csv";
-                            for (int i = 0; i <= 40000; i++)
-                            {
-                                if (!File.Exists(csv_path))
-                                {
+                        //            m_time = overtrue.AddSeconds(-i - 1).ToString("yyyy-MM-dd-HH-mm-ss");
+                        //            csv_path = textBox2.Text + @"\M_" + instr.Substring(5, 3) + "_MZCY_" + instr + "_" + m_time + "_Bv.csv";
+                        //        }
+                        //        else
+                        //        {
+                        //            path = textBox2.Text + @"\M_" + instr.Substring(5, 3) + "_MZCY_" + instr + "_" + m_time + "_Bv.csv";
+                        //            break;
+                        //        }
+                        //    }
+                        //}
+                        //else if (instr.Substring(3, 1) == "P")
+                        //{
+                        //    string csv_path = textBox2.Text + @"\P_" + instr.Substring(5, 3) + "_BTCY_" + instr + "_" + m_time + "_Bv.csv";
+                        //    for (int i = 0; i <= 40000; i++)
+                        //    {
+                        //        if (!File.Exists(csv_path))
+                        //        {
 
-                                    m_time = overtrue.AddSeconds(-i - 1).ToString("yyyy-MM-dd-HH-mm-ss");
-                                    csv_path = textBox2.Text + @"\P_" + textBox1.Text.Substring(5, 3) + "_BTCY_" + textBox1.Text + "_" + m_time + "_Bv.csv";
-                                }
-                                else
-                                {
-                                    path = textBox2.Text + @"\P_" + textBox1.Text.Substring(5, 3) + "_BTCY_" + textBox1.Text + "_" + m_time + "_Bv.csv";
-                                    break;
-                                }
-                            }
-                        }
+                        //            m_time = overtrue.AddSeconds(-i - 1).ToString("yyyy-MM-dd-HH-mm-ss");
+                        //            csv_path = textBox2.Text + @"\P_" + instr.Substring(5, 3) + "_BTCY_" + instr + "_" + m_time + "_Bv.csv";
+                        //        }
+                        //        else
+                        //        {
+                        //            path = textBox2.Text + @"\P_" + instr.Substring(5, 3) + "_BTCY_" + instr + "_" + m_time + "_Bv.csv";
+                        //            break;
+                        //        }
+                        //    }
+                        //}
+                        DirectoryInfo root = new DirectoryInfo(textBox2.Text);
+                        DirectoryInfo[] dics = root.GetDirectories();
+                        tkey = "*" + instr + "*_Bv.csv";//含有ABCDEF字符的txt文件名，不区分大小写
+                        FileInfo[] files = root.GetFiles(tkey);//获取含有ABCDEF字符的txt文件名
+                        path = files[files.Length - 1].ToString();
+
+
                         //OpenFileDialog ofd = new OpenFileDialog();
                         //ofd.Title = "请选择需要校验的文件";
                         //ofd.InitialDirectory = System.Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
@@ -889,46 +908,43 @@ where badLabelCode='" + textBox1.Text + "'", conn3);
                                             }
                                         }
                                     }
-                                    if (textBox1.Text.Substring(3, 1) == "M")
+                                    if (instr.Substring(3, 1) == "M")
                                     {
-                                        if (textBox1.Text.Substring(5, 5) == "PE4M1" | textBox1.Text.Substring(5, 5) == "PE4M3" | textBox1.Text.Substring(5, 5) == "PE4M5" | textBox1.Text.Substring(5, 5) == "PE4M7")
+                                        if (instr.Substring(5, 5) == "PE4M1" | instr.Substring(5, 5) == "PE4M3" | instr.Substring(5, 5) == "PE4M5" | instr.Substring(5, 5) == "PE4M7")
                                         {
                                             doubles.RemoveAt(32);
                                         }
-                                        else if (textBox1.Text.Substring(5, 5) == "PE4M2" | textBox1.Text.Substring(5, 5) == "PE4M4" | textBox1.Text.Substring(5, 5) == "PE4M6" | textBox1.Text.Substring(5, 5) == "PE4M8")
+                                        else if (instr.Substring(5, 5) == "PE4M2" | instr.Substring(5, 5) == "PE4M4" | instr.Substring(5, 5) == "PE4M6" | instr.Substring(5, 5) == "PE4M8")
                                         {
                                             doubles.RemoveAt(30);
                                         }
-                                        else if (textBox1.Text.Substring(5, 3) == "PE5" | textBox1.Text.Substring(5, 3) == "PE6")
+                                        else if (instr.Substring(5, 3) == "PE5" | instr.Substring(5, 3) == "PE6")
                                         {
                                             doubles.RemoveAt(42);
                                         }
                                     }
-                                    else if (textBox1.Text.Substring(3, 1) == "P")
+                                    else if (instr.Substring(3, 1) == "P")
                                     {
-                                        if (textBox1.Text.Substring(5, 3) == "PE4")
+                                        if (instr.Substring(5, 3) == "PE4")
                                         {
                                             doubles.RemoveAt(30);
                                             doubles.RemoveAt(95);
                                         }
 
-                                        else if (textBox1.Text.Substring(5, 3) == "PE5" | textBox1.Text.Substring(5, 3) == "PE6")
+                                        else if (instr.Substring(5, 3) == "PE5" | instr.Substring(5, 3) == "PE6")
                                         {
                                             doubles.RemoveAt(42);
                                             doubles.RemoveAt(125);
                                         }
                                     }
-                                    richTextBox3.AppendText("条码为：" + textBox1.Text + "数据表共" + dt.Rows.Count + "行--" + dt.Columns.Count + "列--\r\n");
-                                    bool b = false;
-                                    bool b3 = true;
-                                    bool b2 = true;
-                                    bool b4 = true;
+                                    richTextBox3.AppendText("条码为：" + instr + "数据表共" + dt.Rows.Count + "行--" + dt.Columns.Count + "列--\r\n");
+
                                     Barrier barrier = new Barrier(3, it =>
                                     {
                                         if (b2 == false | b3 == false | b4 == false)
                                         {
                                             richTextBox3.SelectionColor = Color.Red;
-                                            richTextBox3.AppendText("行的电压最大值和最小值是否相邻判定：" + b2 + "----列的电压数值结果判定：" + b3 + "整包判定不合格\r\n");
+                                            richTextBox3.AppendText("行的电压最大值和最小值是否相邻判定：" + b2 + "----列的电压数值结果判定：" + b3 + "----最大，最小，平均，标准差结果判定：" + b4 + "整包判定不合格\r\n");
                                         }
                                         else
                                         {
@@ -1001,7 +1017,7 @@ where badLabelCode='" + textBox1.Text + "'", conn3);
                                         decimal result2 = Convert.ToDecimal(m_average) - Convert.ToDecimal(4.5) * Convert.ToDecimal(m_sqrt);
                                         if (m_max > Convert.ToDouble(result1) | m_min < Convert.ToDouble(result2))
                                         {
-                                            b = false;
+                                            b4 = false;
                                             richTextBox3.SelectionColor = Color.Red;
                                             richTextBox3.AppendText("--电压最大值：" + m_max + "--电压最小值：" + m_min + "\r\n--电压平均值：" + m_average + "--电压标准差：" + m_sqrt + "此包判定NG\r\n");
                                         }
